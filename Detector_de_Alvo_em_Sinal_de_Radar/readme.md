@@ -93,7 +93,7 @@ end
 A figura abaixo mostra o gráfico do erro de predição em função do valor de $p$, com o valor no cotovelo $p = 2$, que foi o valor da ordem do modelo escolhido também para as próximas etapas.
 
 <p align="center">
-  <img src="figuras/Erro_pred_versus_p.eps" alt="Variância do Erro de Predição em função da Ordem p" width="80%">
+  <img src="figuras/Erro_pred_versus_p.png" alt="Variância do Erro de Predição em função da Ordem p" width="80%">
 </p>
 
 ---
@@ -152,7 +152,7 @@ Isso demonstra que o ganho global com limiar validou a eficácia do método prop
 Após o branqueamento, um dos objetivos é conseguir detectar a frequência do alvo pelo pico do periodograma. Na figura abaixo, é possível ver o periodograma de uma realização, com a frequência real indicada pela linha vertical vermelha ($\omega_{true} = 0.4\pi \ \text{rad}$) muito próxima ao pico do periodograma.
 
 <p align="center">
-  <img src="figuras/frequency_estimation.eps" alt="Resultado do Branqueamento para uma realização" width="80%">
+  <img src="figuras/frequency_estimation.png" alt="Resultado do Branqueamento para uma realização" width="80%">
 </p>
 
 A abordagem permitiu a estimação da frequência com um erro relativo menor que $0.04\%$.
@@ -164,11 +164,11 @@ A abordagem permitiu a estimação da frequência com um erro relativo menor que
 Por fim, foram realizadas Simulações de Monte-Carlo para testar a robustez do método de processamento, a fim de analisar a distribuição do erro de estimação de frequência e a distribuição da razão CFAR, como mostrado nas figuras abaixo.
 
 <p align="center">
-  <img src="figuras/cfar_monte_carlo.eps" alt="Razão CFAR na Frequência Alvo" width="80%">
+  <img src="figuras/cfar_monte_carlo.png" alt="Razão CFAR na Frequência Alvo" width="80%">
 </p>
 
 <p align="center">
-  <img src="figuras/error_monte_carlo.eps" alt="Erro nas Simulações de Monte-Carlo" width="80%">
+  <img src="figuras/error_monte_carlo.png" alt="Erro nas Simulações de Monte-Carlo" width="80%">
 </p>
 
 ---
