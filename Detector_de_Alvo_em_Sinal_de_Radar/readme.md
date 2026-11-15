@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="figuras/logo.png" width="120px" alt="Logo NUPLAM">
+
 # Relatório Técnico
 ### Projeto: Detecção de Alvo em Clutter via Modelagem AR e Filtro Branqueador
 
@@ -88,3 +90,95 @@ for p = 1:p_max
     c_n_p = filter(b_0, [1; a_p], c_n_pre);
     sigma_c(p) = b_0^2;
 end
+```
+
+A figura abaixo mostra o gráfico do erro de predição em função do valor de $p$, com o valor no cotovelo $p = 2$, que foi o valor da ordem do modelo escolhido também para as próximas etapas.
+
+<p align="center">
+  <img src="figuras/Erro_pred_versus_p.eps" alt="Variância do Erro de Predição em função da Ordem p" width="80%">
+</p>
+
+---
+
+## Implementação do Filtro Branqueador
+
+Com a ordem do modelo $\text{AR}(p)$ escolhida, o próximo passo foi a implementação do filtro branqueador, estimado pelas equações de Yule-Walker:
+
+$$r_x[k] + \sum_{l = 1}^{p} a_p(l)r_x[k-l] = 0$$
+
+A autocorrelação do sinal $x[n]$ é contaminada na origem pelo ruído branco $v[n]$. Por isso, a equação acima precisa ser resolvida para lags com $k > 0$; os lags escolhidos ficaram no intervalo $k = [p+1, 2p]$.
+
+```matlab
+kidx = (p+1):(2*p); % defasagens k = p+1 ,... ,2p -- nunca k = 0;
+
+Mmod = zeros(p);
+rhsmod = zeros(p, 1);
+
+for i = 1:p
+    kk = kidx(i);
+    for l = 1:p
+        Mmod (i , l) = r_x(kk - l + 1); 
+    end
+    rhsmod (i) = -r_x(kk + 1) ;
+end
+
+a_hat = ( Mmod \ rhsmod )';
+a_hat_full = [1 , a_hat ]; 
+x_n_w = filter ( a_hat_full , 1 , x_n); % sinal branqueado
+```
+
+Por fim, o filtro $\text{AR}(2)$ estimado foi dado por:
+
+$$a_p[l] = [1, \ -1.3987, \ 0.6508]$$
+
+---
+
+## Verificação da Invariância ao Detector CFAR Local
+
+Uma pergunta óbvia para o processamento implementado é se ele ajudaria um detector CFAR local, visto que o filtro de branqueamento tem influência não apenas no clutter, mas em todas as parcelas que compõem o sinal $x[n]$. Dessa forma, o filtro branqueador não traz apenas benefícios e não permite estimar perfeitamente a frequência do alvo usando um detector CFAR, porque a razão CFAR permanece aproximadamente constante.
+
+Para verificação numérica, comparou-se a razão CFAR na frequência alvo antes da filtragem ($\text{CFAR} = 6.00 \ \text{dB}$) e após a filtragem ($\text{CFAR} = 7.43 \ \text{dB}$). É possível verificar que a razão CFAR muda poucos decibéis, mostrando que esse filtro de branqueamento não auxilia um detector desse tipo.
+
+---
+
+## Quantificação do Ganho com Limiar Local
+
+Comparando a porcentagem de amostras do periodograma antes e depois da filtragem, observa-se que antes da filtragem a porcentagem de frequências acima do limiar de $95\%$ era muito alta ($78\%$), enquanto após a filtragem consolidou-se em $39\%$. 
+
+Isso demonstra que o ganho global com limiar validou a eficácia do método proposto.
+
+---
+
+## Estimação de Frequência e Validação por Monte-Carlo
+
+Após o branqueamento, um dos objetivos é conseguir detectar a frequência do alvo pelo pico do periodograma. Na figura abaixo, é possível ver o periodograma de uma realização, com a frequência real indicada pela linha vertical vermelha ($\omega_{true} = 0.4\pi \ \text{rad}$) muito próxima ao pico do periodograma.
+
+<p align="center">
+  <img src="figuras/frequency_estimation.eps" alt="Resultado do Branqueamento para uma realização" width="80%">
+</p>
+
+A abordagem permitiu a estimação da frequência com um erro relativo menor que $0.04\%$.
+
+---
+
+## Simulações de Monte-Carlo
+
+Por fim, foram realizadas Simulações de Monte-Carlo para testar a robustez do método de processamento, a fim de analisar a distribuição do erro de estimação de frequência e a distribuição da razão CFAR, como mostrado nas figuras abaixo.
+
+<p align="center">
+  <img src="figuras/cfar_monte_carlo.eps" alt="Razão CFAR na Frequência Alvo" width="80%">
+</p>
+
+<p align="center">
+  <img src="figuras/error_monte_carlo.eps" alt="Erro nas Simulações de Monte-Carlo" width="80%">
+</p>
+
+---
+
+## Discussão Teórica
+
+A figura abaixo resume a discussão teórica desenvolvida para o projeto.
+
+<p align="center">
+  <img src="figuras/Conclusao_Projeto_1.pdf" alt="Discussão Teórica" width="80%">
+</p>
