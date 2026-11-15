@@ -174,9 +174,6 @@ Por fim, foram realizadas Simulações de Monte-Carlo para testar a robustez do 
 ---
 
 ## Discussão Teórica
+Neste projeto foi possível analisar a performance do filtro branqueador para revelar o alvo em um sinal de radar contaminado com um clutter, que é um ruído de banda estreita capaz de mascarar o o alvo. Porém como a filtragem é aplicada tanto no alvo tanto no clutter, pode acabar afetando também o sinal desejado. Essa abordagem pode beneficiar um detector baseado em limiar fixo, mas não ajuda um detector CFAR, visto que a razão pico piso permanece aproximdamente constante.
 
-A figura abaixo resume a discussão teórica desenvolvida para o projeto.
 
-<p align="center">
-  <img src="figuras/Conclusao_Projeto_1.pdf" alt="Discussão Teórica" width="80%">
-</p>
