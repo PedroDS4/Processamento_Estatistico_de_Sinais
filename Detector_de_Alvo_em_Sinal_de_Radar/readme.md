@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="figuras/logo.png" width="120px" alt="Logo NUPLAM">
-
 # Relatório Técnico
 ### Projeto: Detecção de Alvo em Clutter via Modelagem AR e Filtro Branqueador
 
